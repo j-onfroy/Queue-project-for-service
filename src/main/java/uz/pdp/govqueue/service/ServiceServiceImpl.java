@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import uz.pdp.govqueue.enums.LevelEnum;
 import uz.pdp.govqueue.model.GovService;
 import uz.pdp.govqueue.payload.LevelDTO;
-import uz.pdp.govqueue.payload.ServiceDTO;
+import uz.pdp.govqueue.payload.GovServiceDTO;
 import uz.pdp.govqueue.repository.GovServiceRepository;
 
 import java.util.*;
@@ -33,27 +33,27 @@ public class ServiceServiceImpl implements ServiceService {
     }
 
     @Override
-    public ServiceDTO create(ServiceDTO serviceDTO) {
+    public GovServiceDTO create(GovServiceDTO govServiceDTO) {
 
-        if (govServiceRepository.existsByName(serviceDTO.getName()))
+        if (govServiceRepository.existsByName(govServiceDTO.getName()))
             throw new RuntimeException("Service already exists");
 
         GovService govService = GovService.builder()
-                .name(serviceDTO.getName())
-                .firstLetter(serviceDTO.getFirstLetter())
-                .level(serviceDTO.getLevel())
-                .status(serviceDTO.getStatus())
+                .name(govServiceDTO.getName())
+                .firstLetter(govServiceDTO.getFirstLetter())
+                .level(govServiceDTO.getLevel())
+                .status(govServiceDTO.getStatus())
                 .build();
 
 
         govService = govServiceRepository.save(govService);
-        serviceDTO.setId(govService.getId());
+        govServiceDTO.setId(govService.getId());
 
-        return serviceDTO;
+        return govServiceDTO;
     }
 
-    private ServiceDTO mapServiceDTO(GovService govService) {
-        return ServiceDTO.builder()
+    private GovServiceDTO mapServiceDTO(GovService govService) {
+        return GovServiceDTO.builder()
                 .id(govService.getId())
                 .firstLetter(govService.getFirstLetter())
                 .level(govService.getLevel())

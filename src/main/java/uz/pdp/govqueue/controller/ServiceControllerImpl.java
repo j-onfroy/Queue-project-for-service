@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import uz.pdp.govqueue.payload.LevelDTO;
-import uz.pdp.govqueue.payload.ServiceDTO;
+import uz.pdp.govqueue.payload.GovServiceDTO;
 import uz.pdp.govqueue.service.ServiceService;
 
 import java.util.List;
@@ -24,8 +24,8 @@ public class ServiceControllerImpl implements ServiceController {
     }
 
     @Override
-    public HttpEntity<ServiceDTO> add(ServiceDTO serviceDTO) {
-        serviceDTO = serviceService.create(serviceDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(serviceDTO);
+    public HttpEntity<GovServiceDTO> add(GovServiceDTO govServiceDTO) {
+        govServiceDTO = serviceService.create(govServiceDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(govServiceDTO);
     }
 }

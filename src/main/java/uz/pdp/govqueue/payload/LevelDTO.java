@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import uz.pdp.govqueue.enums.LevelEnum;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -18,7 +17,7 @@ public class LevelDTO {
 
     private LevelEnum level;
 
-    private List<ServiceDTO> services;
+    private List<GovServiceDTO> services;
 
     public LevelDTO(LevelEnum level) {
         this.level = level;

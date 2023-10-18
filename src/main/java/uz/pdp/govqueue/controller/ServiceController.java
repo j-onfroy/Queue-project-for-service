@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import uz.pdp.govqueue.payload.LevelDTO;
-import uz.pdp.govqueue.payload.ServiceDTO;
+import uz.pdp.govqueue.payload.GovServiceDTO;
 
 import java.util.List;
 
@@ -20,7 +20,7 @@ public interface ServiceController {
     HttpEntity<List<LevelDTO>> forQueue();
 
     @PostMapping
-    HttpEntity<ServiceDTO> add(@Valid @RequestBody ServiceDTO serviceDTO);
+    HttpEntity<GovServiceDTO> add(@Valid @RequestBody GovServiceDTO govServiceDTO);
 
     /*
     [

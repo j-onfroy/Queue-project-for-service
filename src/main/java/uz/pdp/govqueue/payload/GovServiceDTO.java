@@ -11,7 +11,7 @@ import uz.pdp.govqueue.enums.LevelEnum;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ServiceDTO {
+public class GovServiceDTO {
 
     private Integer id;
 
