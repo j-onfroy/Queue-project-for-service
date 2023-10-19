@@ -11,8 +11,8 @@ import uz.pdp.govqueue.payload.GovServiceDTO;
 
 import java.util.List;
 
-@RequestMapping(ServiceController.BASE_PATH)
-public interface ServiceController {
+@RequestMapping(GovServiceController.BASE_PATH)
+public interface GovServiceController {
 
     String BASE_PATH = "/service";
 

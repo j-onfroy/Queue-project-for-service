@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-public class ServiceControllerImpl implements ServiceController {
+public class GovServiceControllerImpl implements GovServiceController {
 
     private final ServiceService serviceService;
 
