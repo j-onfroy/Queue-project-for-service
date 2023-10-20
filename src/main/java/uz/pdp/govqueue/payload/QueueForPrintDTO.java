@@ -11,7 +11,11 @@ import uz.pdp.govqueue.model.GovService;
 
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.time.LocalTime;
 
+/**
+ * Check uchun data ni qaytarishga mo'ljallangan
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -26,5 +30,5 @@ public class QueueForPrintDTO {
 
     private String number;
 
-    private Time roundTime;
+    private LocalTime roundTime;
 }
