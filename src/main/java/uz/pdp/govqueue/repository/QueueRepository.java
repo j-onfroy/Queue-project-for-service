@@ -27,4 +27,18 @@ public interface QueueRepository extends CrudRepository<Queue, Integer> {
             """)
     Long getAvgYesterdayByFirstLetter(@Param("start") Timestamp start, @Param("end") Timestamp end, @Param("firstLetter") String firstLetter);
 
+    List<Queue> findAllByStatus(QueueStatusEnum queueStatusEnum);
+
+    @Query(value = """
+                SELECT *
+                FROM queue q
+                WHERE created_at >= current_date
+                  AND (operator_id = :operatorId OR (
+                            status = 'RUNNABLE' AND
+                            q.gov_service_id IN
+                            (SELECT gov_service_id
+                             FROM operator_service
+                             WHERE operator_id = :operatorId)))
+            """)
+    List<Queue> findAllByStatusAndOperatorId(@Param("operatorId") Integer operatorId);
 }

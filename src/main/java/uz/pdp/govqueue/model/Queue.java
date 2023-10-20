@@ -36,5 +36,7 @@ public class Queue {
 
     private Timestamp finishedAt;
 
+    private Integer operatorId;
+
 //    private Operator operator;
 }

@@ -1,6 +1,7 @@
 package uz.pdp.govqueue.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.relational.core.sql.In;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,7 +30,7 @@ public class QueueControllerImpl implements QueueController {
     }
 
     @Override
-    public HttpEntity<?> callQueue(Integer operatorId) {
+    public HttpEntity<?> callQueue(Integer id, Integer operatorId) {
 //        queueService.callQueue();
         return null;
     }

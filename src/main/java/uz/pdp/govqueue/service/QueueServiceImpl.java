@@ -8,10 +8,7 @@ import uz.pdp.govqueue.enums.QueueStatusEnum;
 import uz.pdp.govqueue.exceptions.MyException;
 import uz.pdp.govqueue.model.GovService;
 import uz.pdp.govqueue.model.Queue;
-import uz.pdp.govqueue.payload.AddQueueDTO;
-import uz.pdp.govqueue.payload.ApiResult;
-import uz.pdp.govqueue.payload.QueueForPrintDTO;
-import uz.pdp.govqueue.payload.StatusDTO;
+import uz.pdp.govqueue.payload.*;
 import uz.pdp.govqueue.repository.GovServiceRepository;
 import uz.pdp.govqueue.repository.OperatorRepository;
 import uz.pdp.govqueue.repository.QueueRepository;
@@ -21,8 +18,9 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +29,6 @@ public class QueueServiceImpl implements QueueService {
     private final QueueRepository queueRepository;
     private final GovServiceRepository govServiceRepository;
     private final OperatorRepository operatorRepository;
-
 
     @Transactional
     @Override
@@ -59,13 +56,52 @@ public class QueueServiceImpl implements QueueService {
 
     @Override
     public ApiResult<List<StatusDTO>> forBoard(Integer operatorId) {
-        //TODO
-        // ALL RUNNABLE
-        // MY QUEUE IN OTHER STATUS
+        List<Queue> queues = queueRepository.findAllByStatusAndOperatorId(operatorId);
 
-        return null;
+        Map<QueueStatusEnum, List<QueueDTO>> map = new HashMap<>();
+
+        Arrays.stream(QueueStatusEnum.values()).forEach(status -> map.put(status, new LinkedList<>()));
+
+        queues.forEach(queue -> map.get(queue.getStatus()).add(mapQueueDTO(queue)));
+
+        List<StatusDTO> statusDTOList = map.entrySet().stream().map(this::mapStatusDTO).toList();
+
+        return new ApiResult<>(statusDTOList);
     }
 
+    private StatusDTO mapStatusDTO(Map.Entry<QueueStatusEnum, List<QueueDTO>> entry) {
+        return StatusDTO.builder()
+                .queues(entry.getValue())
+                .queueCount(entry.getValue().size())
+                .title(entry.getKey())
+                .build();
+    }
+
+    private List<QueueDTO> mapQueueDTO(List<Queue> queues, QueueStatusEnum queueStatusEnum) {
+        return queueRepository.findAllByStatus(QueueStatusEnum.RUNNABLE).stream().filter(queue -> queue.getStatus().equals(queueStatusEnum)).map(queue -> QueueDTO.builder()
+                .number(queue.getNumber())
+                .createdAt(queue.getCreatedAt())
+                .beforeCount(queue.getBeforeCount())
+                .status(queueStatusEnum)
+                .finishedAt(queue.getFinishedAt())
+                .waitingAt(queue.getWaitingAt())
+                .startedAt(queue.getStartedAt())
+                .build()).toList();
+    }
+
+    private QueueDTO mapQueueDTO(Queue queue) {
+        return QueueDTO.builder()
+                .id(queue.getId())
+                .operatorId(queue.getOperatorId())
+                .number(queue.getNumber())
+                .createdAt(queue.getCreatedAt())
+                .beforeCount(queue.getBeforeCount())
+                .status(queue.getStatus())
+                .finishedAt(queue.getFinishedAt())
+                .waitingAt(queue.getWaitingAt())
+                .startedAt(queue.getStartedAt())
+                .build();
+    }
 
     /**
      * IF status false throw

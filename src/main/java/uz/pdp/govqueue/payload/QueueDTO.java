@@ -1,5 +1,6 @@
 package uz.pdp.govqueue.payload;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,6 +13,7 @@ import java.sql.Timestamp;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class QueueDTO {
 
     private Integer id;
@@ -33,4 +35,6 @@ public class QueueDTO {
     private Timestamp waitingAt;
 
     private Timestamp finishedAt;
+
+    private Integer operatorId;
 }
