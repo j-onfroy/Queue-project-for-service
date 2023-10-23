@@ -41,4 +41,34 @@ public interface QueueRepository extends CrudRepository<Queue, Integer> {
                              WHERE operator_id = :operatorId)))
             """)
     List<Queue> findAllByStatusAndOperatorId(@Param("operatorId") Integer operatorId);
+
+    @Query(value = """
+                            WITH temp AS (SELECT *
+                                          FROM queue
+                                          WHERE status = 'RUNNABLE'
+                                            AND created_at >= CURRENT_DATE
+                                            AND gov_service_id IN (SELECT gov_service_id
+                                                                   FROM operator_service
+                                                                   WHERE operator_id = :operatorId))
+                            SELECT *
+                            FROM temp
+                            WHERE created_at = (SELECT MIN(created_at)
+                                                FROM temp) FOR UPDATE LIMIT 1
+            """)
+    Optional<Queue> getTopRunnableByOperatorId(Integer operatorId);
+
+    @Query(value = """
+            WITH temp AS (SELECT *
+                          FROM queue
+                          WHERE status = 'CALLED'
+                            AND created_at >= CURRENT_DATE
+                            AND gov_service_id IN (SELECT gov_service_id
+                                                   FROM operator_service
+                                                   WHERE operator_id = :operatorId))
+            SELECT *
+            FROM temp
+            WHERE created_at = (SELECT MIN(created_at)
+                                FROM temp) FOR UPDATE LIMIT 1
+            """)
+    Optional<Queue> getTopCalledByOperatorId(Integer operatorId);
 }

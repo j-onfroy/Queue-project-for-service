@@ -8,6 +8,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -38,5 +39,14 @@ public class Queue {
 
     private Integer operatorId;
 
-//    private Operator operator;
+    @Builder.Default
+    private Integer calledCount = 0;
+
+    //    private Operator operator;
+
+
+    public Integer getCalledCount() {
+
+        return calledCount == null ? 0 : calledCount;
+    }
 }

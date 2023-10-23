@@ -12,7 +12,7 @@ public interface QueueController {
 
     String BASE_PATH = "/queue";
     String ADD_PATH = "/add";
-    String OPERATOR_CALL_PATH = "/call/{id}";
+    String OPERATOR_CALL_PATH = "/call";
     String MOVE_PATH = "/move";
     String FOR_BOARD_PATH = "/board/{operatorId}";
 
@@ -32,7 +32,7 @@ public interface QueueController {
     @PostMapping(ADD_PATH)
     HttpEntity<ApiResult<QueueForPrintDTO>> add(@RequestBody @Valid AddQueueDTO addQueueDTO);
 
-    @PatchMapping(OPERATOR_CALL_PATH)
+    @PatchMapping(value = {OPERATOR_CALL_PATH, OPERATOR_CALL_PATH + "/{id}"})
     HttpEntity<?> callQueue(@PathVariable(required = false) Integer id,
                             @RequestParam(required = false) Integer operatorId);
 

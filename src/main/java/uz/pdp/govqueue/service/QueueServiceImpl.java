@@ -19,8 +19,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -67,6 +65,36 @@ public class QueueServiceImpl implements QueueService {
         List<StatusDTO> statusDTOList = map.entrySet().stream().map(this::mapStatusDTO).toList();
 
         return new ApiResult<>(statusDTOList);
+    }
+
+
+    @Override
+    public ApiResult<QueueDTO> callQueue(Integer operatorId) {
+
+        Optional<Queue> optionalQueue = queueRepository.getTopCalledByOperatorId(operatorId);
+
+        Queue queue;
+        if (optionalQueue.isEmpty())
+            queue = queueRepository.getTopRunnableByOperatorId(operatorId).orElseThrow(() -> new MyException("You don't have runnable queue", HttpStatus.NOT_FOUND));
+        else
+            queue = optionalQueue.get();
+
+        if (queue.getCalledCount() == 3)
+            throw new MyException("OKa 3 martadan ortiq chaqirdiz", HttpStatus.BAD_REQUEST);
+
+        if (queue.getCalledAt() != null && (System.currentTimeMillis() - queue.getCalledAt().getTime() < 20_000))
+            throw new MyException("Oka 20 sekunddan keyin chaqiring", HttpStatus.BAD_REQUEST);
+
+        queue.setOperatorId(operatorId);
+        queue.setStatus(QueueStatusEnum.CALLED);
+        queue.setCalledAt(new Timestamp(System.currentTimeMillis()));
+        queue.setCalledCount(queue.getCalledCount() + 1);
+
+        queueRepository.save(queue);
+
+        return new ApiResult<>(
+
+                mapQueueDTO(queue));
     }
 
     private StatusDTO mapStatusDTO(Map.Entry<QueueStatusEnum, List<QueueDTO>> entry) {

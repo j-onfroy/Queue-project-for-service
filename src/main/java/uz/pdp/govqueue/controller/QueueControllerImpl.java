@@ -31,8 +31,8 @@ public class QueueControllerImpl implements QueueController {
 
     @Override
     public HttpEntity<?> callQueue(Integer id, Integer operatorId) {
-//        queueService.callQueue();
-        return null;
+        ApiResult<QueueDTO> result = queueService.callQueue(operatorId);
+        return ResponseEntity.ok(result);
     }
 
     @Override
