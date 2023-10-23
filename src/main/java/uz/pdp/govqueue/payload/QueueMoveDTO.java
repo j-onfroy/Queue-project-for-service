@@ -11,5 +11,5 @@ public class QueueMoveDTO {
     private Integer id;
 
     @NotNull
-    private QueueStatusEnum status;
+    private QueueStatusEnum destinationStatus;
 }
