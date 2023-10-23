@@ -36,7 +36,7 @@ public class QueueControllerImpl implements QueueController {
     }
 
     @Override
-    public HttpEntity<?> moveToRunning(QueueMoveDTO queueMoveDTO) {
+    public HttpEntity<?> move(QueueMoveDTO queueMoveDTO) {
         return null;
     }
 }

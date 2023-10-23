@@ -38,5 +38,5 @@ public interface QueueController {
 
 
     @PatchMapping(MOVE_PATH)
-    HttpEntity<?> moveToRunning(@Valid @RequestBody QueueMoveDTO queueMoveDTO);
+    HttpEntity<?> move(@Valid @RequestBody QueueMoveDTO queueMoveDTO);
 }
